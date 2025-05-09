@@ -3,6 +3,17 @@ import NewsItem from "./NewsItem";
 import Spinner from "./Spinner";
 import PropTypes from 'prop-types';
 
+function throttle(func, delay) {
+  let run = false;
+  return function (...args) {
+    if (!run) {
+      func(...args);
+      run = true;
+      setTimeout(() => run = false, delay);
+    }
+  };
+}
+
 export class News extends Component {
   static defaultProps={
     country: "us",
@@ -22,59 +33,95 @@ export class News extends Component {
         loading: false,
         page: 1,
         totalResults: 0,
-        articleLength: 0
+        articleLength: 0,
+        isNoResponse: false,
+        isError426: false,
+        isRateLimited: false
       }
       document.title=`${this.capitalizeFirstLetter(this.props.category)} - NewsPanda`;
+      this.throttledScroll = throttle(this.handleScroll, 400);
    }
-  //  setStateAsync(stateUpdate){
-  //   return new Promise( resolve => this.setState(stateUpdate, resolve) );
-  //  }
-  //  handlePrevClick = ()=>{
-  //   this.setState(
-  //     prevState => ({page: prevState.page - 1}),
-  //     async ()=>{
-  //       await this.updateNews();
-  //     }
-  //   );
-  //  }
-  //  handleNextClick = async ()=>{
-  //   await this.setStateAsync( prevState =>({page: prevState.page + 1}) );
-  //   await this.updateNews();
-  //  }
+
   isFetching=false;
 
    async updateNews(){
-    this.setState({loading: true});
-    this.props.setProgress(10);
-    let res=await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&lang=en&sortBy=popularity&category=${this.props.category}&apiKey=${this.props.APIkey}&page=${this.state.page}&pageSize=${this.props.pageSize}`);
-    this.props.setProgress(35);
-    let response=await res.json();
-    this.props.setProgress(55);
-    this.setState({
-      articles: response.articles,
-      totalResults: response.totalResults,
-      articleLength: response.articles.length,
-      loading: false
-    });
-    this.props.setProgress(100);
+    try {
+      this.setState({loading: true});
+      this.props.setProgress(10);
+      let res=await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&language=en&sortBy=popularity&category=${this.props.category}&apiKey=${this.props.APIkey}&page=${this.state.page}&pageSize=${this.props.pageSize}`);
+      this.props.setProgress(35);
+      let response=await res.json();
+      this.props.setProgress(55);
+      this.setState({
+        articles: response.articles,
+        totalResults: response.totalResults,
+        articleLength: response.articles.length,
+        loading: false
+      }, ()=>{
+        this.props.setProgress(100);
+      });
+    } catch (error) {
+      console.log("Couldn't fetch data:", error);
+    }
    }
-   monitorScroll = async ()=>{
-    if(!this.isFetching && window.innerHeight + window.scrollY + 1 >= document.documentElement.scrollHeight && this.state.articleLength < this.state.totalResults){
+   handleScroll = async () => {
       this.isFetching=true;
       const nextPage=this.state.page + 1;
       this.setState(prevState => ({
         page: prevState.page + 1,
         loading: true
       }));
-      let res=await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&lang=en&sortBy=popularity&category=${this.props.category}&apiKey=${this.props.APIkey}&page=${nextPage}&pageSize=${this.props.pageSize}`);
-      let response=await res.json();
-      this.setState(prevState => ({
-        articles: prevState.articles.concat(response.articles),
-        articleLength: prevState.articleLength + response.articles.length,
-        loading: false
-      }));
-      this.isFetching=false;
-    }
+      try {
+        let res=await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&language=en&sortBy=popularity&category=${this.props.category}&apiKey=${this.props.APIkey}&page=${nextPage}&pageSize=${this.props.pageSize}`);
+        if(res.status===426){
+          this.setState({isError426: true, loading: false}, ()=>{
+            this.isFetching=false;
+            return;
+          })
+        }
+        if (res.status === 429){
+          this.setState({isRateLimited: true, loading: false}, ()=>{
+            this.isFetching=false;
+            return;
+          })
+        }
+        if(!res.ok){
+          this.setState({loading: false}, ()=>{
+            this.isFetching=false;
+            return;
+          })
+        }
+        let response=await res.json();
+        if(response.articles.length > 0){
+          this.setState(prevState => ({
+            articles: prevState.articles.concat(response.articles),
+            articleLength: prevState.articleLength + response.articles.length,
+            loading: false
+          }), ()=>{
+            this.isFetching=false;
+          });
+        }
+        else{
+          this.setState({ loading: false, isNoResponse: true }, ()=>{
+            this.isFetching=false;
+          });
+        }
+      } catch (error) {
+        console.error("Error occured: ", error);
+        this.setState({ loading: false }, () => {
+          this.isFetching = false;
+        });
+      }
+   }
+   monitorScroll = async ()=>{
+      if(this.state.isNoResponse) return;
+      if(this.state.isError426) return;
+      if(this.state.isRateLimited) return;
+      if(this.isFetching) return;
+      if(this.state.articleLength >= this.state.totalResults) return;
+      if(window.innerHeight + window.scrollY + 1 < document.documentElement.scrollHeight) return;
+
+      this.throttledScroll();
    }
    async componentDidMount(){
     window.addEventListener("scroll", this.monitorScroll);
@@ -85,29 +132,27 @@ export class News extends Component {
    }
    componentWillUnmount() {
     window.removeEventListener("scroll", this.monitorScroll);
+    clearTimeout(this.debounceTimer);
   }
   render() {
     return (
       <>
         <div className="container my-3">
           <h1 className="text-center">NewsPanda - Latest {this.capitalizeFirstLetter(this.props.category)} Headlines</h1>
-          {/* {this.state.loading && <Spinner/>} */}
           {<div className="row my-4">
             {
               this.state.articles.map((elements)=>{
-                if(elements.title===null) elements.title="";
-                if(elements.description===null) elements.description="";
-                return <div className="col-md-4" key={elements.url}>
+                if(!elements.title) elements.title="";
+                if(!elements.description) elements.description="";
+                if(!elements.author) elements.author="Unknown";
+                if(!elements.source.name) elements.source.name="Source Unknown";
+                return <div className="col-md-4" key={elements.url || elements.title || Math.random()}>
                   <NewsItem title={elements.title} description={elements.description} imageUrl={elements.urlToImage} newsUrl={elements.url} author={elements.author} publishedAt={elements.publishedAt} name={elements.source.name}/>
                 </div>
               })
             }
           </div>}
           {this.state.loading && <Spinner/>}
-          {/* <div className="d-flex justify-content-center my-5">
-          <button type="button" className="btn btn-primary mx-2" disabled={this.state.page<=1} onClick={this.handlePrevClick}>&larr; Prev</button>
-          <button type="button" className="btn btn-primary mx-2" disabled={Math.ceil(this.state.totalResults/this.props.pageSize) === this.state.page} onClick={this.handleNextClick}>Next &rarr;</button>
-          </div> */}
         </div>
       </>
     );
