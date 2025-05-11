@@ -1,23 +1,17 @@
 import './App.css';
 
-import React, { Component } from 'react'
+import React, { useState, useRef } from 'react'
 import Navbar from './Components/Navbar';
 import News from './Components/News';
 import About from './Components/About';
 import { HashRouter, Routes, Route } from "react-router-dom";
 import LoadingBar from "react-top-loading-bar";
 
-const myAPI=process.env.REACT_APP_API2;
+const myAPI=process.env.REACT_APP_API3;
 
-export default class App extends Component {
-  state={
-    progress: 0
-  }
-  setProgress = (progress) =>{
-    this.setState({progress: progress});
-  }
-  pageSize=9;
-  render() {
+const App = () => {
+  const [progress, setProgress]=useState(0);
+  const pageSizeRef=useRef(9);
     return (
       <>
       <HashRouter>
@@ -25,24 +19,24 @@ export default class App extends Component {
         <LoadingBar
           color="#f11946"
           height={3}
-          progress={this.state.progress}
+          progress={progress}
         />
         <div>
           
         </div>
         <Routes>
-          <Route path="/" element={<News setProgress={this.setProgress} key="k1" APIkey={myAPI} pageSize={this.pageSize} category="general"/>}/>
-          <Route path="/general" element={<News setProgress={this.setProgress} key="k2" APIkey={myAPI} pageSize={this.pageSize} category="general"/>}/>
-          <Route path="/science" element={<News setProgress={this.setProgress} key="k3" APIkey={myAPI} pageSize={this.pageSize} category="science"/>}/>
-          <Route path="/business" element={<News setProgress={this.setProgress} key="k4" APIkey={myAPI} pageSize={this.pageSize} category="business"/>}/>
-          <Route path="/entertainment" element={<News setProgress={this.setProgress} key="k5" APIkey={myAPI} pageSize={this.pageSize} category="entertainment"/>}/>
-          <Route path="/health" element={<News setProgress={this.setProgress} key="k6"APIkey={myAPI} pageSize={this.pageSize} category="health"/>}/>
-          <Route path="/sports" element={<News setProgress={this.setProgress} key="k7" APIkey={myAPI} pageSize={this.pageSize} category="sports"/>}/>
-          <Route path="/technology" element={<News setProgress={this.setProgress} key="k8" APIkey={myAPI} pageSize={this.pageSize} category="technology"/>}/>
+          <Route path="/" element={<News setProgress={setProgress} key="k1" APIkey={myAPI} pageSize={pageSizeRef.current} category="general" country="us"/>}/>
+          <Route path="/general" element={<News setProgress={setProgress} key="k2" APIkey={myAPI} pageSize={pageSizeRef.current} category="general" country="us"/>}/>
+          <Route path="/science" element={<News setProgress={setProgress} key="k3" APIkey={myAPI} pageSize={pageSizeRef.current} category="science" country="us"/>}/>
+          <Route path="/business" element={<News setProgress={setProgress} key="k4" APIkey={myAPI} pageSize={pageSizeRef.current} category="business" country="us"/>}/>
+          <Route path="/entertainment" element={<News setProgress={setProgress} key="k5" APIkey={myAPI} pageSize={pageSizeRef.current} category="entertainment" country="us"/>}/>
+          <Route path="/health" element={<News setProgress={setProgress} key="k6"APIkey={myAPI} pageSize={pageSizeRef.current} category="health" country="us"/>}/>
+          <Route path="/sports" element={<News setProgress={setProgress} key="k7" APIkey={myAPI} pageSize={pageSizeRef.current} category="sports" country="us"/>}/>
+          <Route path="/technology" element={<News setProgress={setProgress} key="k8" APIkey={myAPI} pageSize={pageSizeRef.current} category="technology" country="us"/>}/>
           <Route path="/about" element={<About/>}/>
         </Routes>
       </HashRouter>
       </>
     )
-  }
 }
+export default App;
