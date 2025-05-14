@@ -1,5 +1,5 @@
 import React from 'react'
-import loading from "./loadingMaginfyingGlass.gif"
+import loading from "./loadingMaginfyingGlass1.gif"
 
 const Spinner = () => {
     return (

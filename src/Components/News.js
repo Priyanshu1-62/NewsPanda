@@ -22,7 +22,6 @@ const News = (props) => {
   const [loading, setLoading]=useState(false);
   const [page, setPage]=useState(1);
   const [totalResults, setTotalResults]=useState(0);
-  const [articleLength, setArticleLength]=useState(0);
   const [isNoResponse, setIsNoResponse]=useState(false);
   const [isError426, setIsError426]=useState(false);
   const [isRateLimited, setIsRateLimited]=useState(false);
@@ -30,13 +29,10 @@ const News = (props) => {
   const loadingRef=useRef(false);
   const pageRef=useRef(1);
   const totalResultsRef=useRef(0);
-  const articleLengthRef=useRef(0);
   const isNoResponseRef=useRef(false);
   const isError426Ref=useRef(false);
   const isRateLimitedRef=useRef(false);
   const isFetchingRef=useRef(false);
-
-  document.title=`${capitalizeFirstLetter(props.category)} - NewsPanda`;
 
    const updateNews = async () => {
     try {
@@ -48,7 +44,6 @@ const News = (props) => {
       let response=await res.json();
       setArticles(response.articles);
       setTotalResults(response.totalResults);
-      setArticleLength(response.articles.length);
       setLoading(false);
       props.setProgress(100);
     } catch (error) {
@@ -80,7 +75,6 @@ const News = (props) => {
         let response=await res.json();
         if(response.articles.length > 0){
           setArticles(prevArticles => prevArticles.concat(response.articles));
-          setArticleLength(prevArticleLength => prevArticleLength + response.articles.length);
           setLoading(false);
         }
         else{
@@ -99,11 +93,11 @@ const News = (props) => {
       if(isError426Ref.current) return;
       if(isRateLimitedRef.current) return;
       if(isFetchingRef.current) return;
-      if(articleLengthRef.current >= totalResultsRef.current) return;
       if(window.innerHeight + window.scrollY + 1 < document.documentElement.scrollHeight) return;
       throttledScroll();
    }
    useEffect(() => {
+    document.title=`${capitalizeFirstLetter(props.category==="general"?"home":props.category)} - NewsPanda`;
     window.addEventListener("scroll", monitorScroll);
     updateNews();
 
@@ -122,8 +116,7 @@ const News = (props) => {
     loadingRef.current=loading;
     pageRef.current=page;
     totalResultsRef.current=totalResults;
-    articleLengthRef.current=articleLength;
-   }, [articles, loading, page, totalResults, articleLength]);
+   }, [articles, loading, page, totalResults]);
 
    useEffect( () => {
     isError426Ref.current=isError426;
@@ -132,17 +125,13 @@ const News = (props) => {
    }, [isError426, isRateLimited, isNoResponse]);
 
    useEffect(() => {
-    props.setProgress(100);
-   }, [totalResults]);
-
-   useEffect(() => {
     if(loading===false) isFetchingRef.current=false;
    }, [loading]);
    
     return (
       <>
         <div className="container my-3">
-          <h1 className="text-center">NewsPanda - Latest {capitalizeFirstLetter(props.category)} Headlines</h1>
+          <h1 className="text-center"><bold>NewsPanda - Latest {capitalizeFirstLetter(props.category)} Headlines</bold></h1>
           {<div className="row my-4">
             {
               articles.map((elements)=>{
