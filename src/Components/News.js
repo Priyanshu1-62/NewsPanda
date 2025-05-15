@@ -39,7 +39,7 @@ const News = (props) => {
       props.setProgress(10);
       await new Promise(resolve => setTimeout(resolve, 100));
       setLoading(true);
-      let res=await fetch(`http://localhost:9000/news?country=${props.country}&language=en&sortBy=popularity&category=${props.category}&page=${pageRef.current}&pageSize=${props.pageSize}`);
+      let res=await fetch(`https://newspanda-proxyserver.onrender.com/news?country=${props.country}&language=en&sortBy=popularity&category=${props.category}&page=${pageRef.current}&pageSize=${props.pageSize}`);
       props.setProgress(35);
       let response=await res.json();
       setArticles(response.articles);
@@ -57,7 +57,7 @@ const News = (props) => {
       setPage(pageRef.current);
       setLoading(true);
       try {
-        let res=await fetch(`http://localhost:9000/news?country=${props.country}&language=en&sortBy=popularity&category=${props.category}&page=${nextPage}&pageSize=${props.pageSize}`);
+        let res=await fetch(`https://newspanda-proxyserver.onrender.com/news?country=${props.country}&language=en&sortBy=popularity&category=${props.category}&page=${nextPage}&pageSize=${props.pageSize}`);
         if(res.status===426){
           setIsError426(true);
           setLoading(false);
