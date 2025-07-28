@@ -13,31 +13,26 @@ Update: check out the live app [here](https://priyanshu1-62.github.io/NewsPanda)
 ---
 
 ### 🗺️ Overview
-- 
+- NewsPanda is your one-stop destination to get your daily doze of news. Curious about stocks? Whether you're tracking the stock market, curious about box office records, need details of the upcomming space mission, or just looking to stay updated with the latest in health and technology — NewsPanda got you covered !!
+- This is a React based project designed to fetch news articles from [NewsAPI](https://newsapi.org) across multiple categories, and present them in a catagorized, structured way. To ensure smooth performance and a seamless reading experience, the app incorporates many modern frontend techniques. More about them in next sections.
 ---
 
-### 🧠 State Management
-- The project required certain vaiables to be accessible across all React-components. While this can be technically achieved by prop drilling, it would lead to cluttered folder structure and reduced scalability. It would be combursome to add a few more such global variables and functions.
-- To tacle this, context API is used. Based on the responsibilities, 3 context providers are created - for Authorization, Notes management, Alert management. These contexts envelpoes rest of the app tree to make the necessary variables and functions easily accessible throughout the app.
-- The state variables are responsible for authorized entry, restricted notes manipulation, loading spinner management, and to show visually informative Alerts.
+### 🛠️ Architecture
+- For learning purpose, complete design was initially executed using React Class based components and Life-cycle methods. This lead to a strong foundation for how React actually manages states, props, and re-rendering. Once completed, all components were converted into funcitonal based components. This helped to grasp mapping between class based and functional based components and made it clear how Reach hooks replaces life-cycle methods.
+- Regarding structure, multiple routes are defined which are further utilized in Navbar as a means to navigate user to different News category sections.
+- Fetch API is used to establish communication with NewsAPI server.
+- All catagory names, API parameters and styling properties are kept declarative, promoting scalability and easier maintainance.
 ---
 
-### 📡 API Integration and Routing
-- Fetch-API is used for all Client-to-server communication. Authentication and authorization management routing funcitons include: Signup, Login, Remember me, Logout, Refreshing the session token. Notes management routing functions include: Create, Read, Update, Delete (CRUD) notes.
-- To handle expired sessions seamlessly, without need of Logout and re-Login, a refresh mechanism is used in notes management routing functions. This mechanism catches server response status before updating user interface. If the status implies "Session expired", then it tries to renew the session and retries the original request.
-- Dynamic routing is incoorporated to include Notes ID into route params for Updating and Deleting notes.
-- All routes include structured response handling with consistent and clear Alert messeges for meaningful UI feedback.
-- Session tokens are stored in Local storage to persist user sessions across page reloads. The token is later retrived and integrated in request body by routing functions. Since data in local storage is vulnerable to XSS attacks, a system of access and refresh token is used. Access tokens are responsible for authorization and have short life-span, thus reducing the damange window if stolen. Refresh tokens, with longer validity period, are responsible for renewing access tokens periodically and are securely kept in HTTP-only cookies. Read more about it in Authentication and Security section present in [Backend repository](https://github.com/Priyanshu1-62/iNoteBook-Server.git) of this project.
+### Features
+- __Infinite Scroll:__ For the selected News category, only a certain number of News articles are fetched, typically sufficient enough to fill the page. Scroll position is continuously under observation and as soon as it reaches near end of page, a new batch of News articles of same catagory are fetched.
+- __Top Loading bar:__ In order to show progress and signify the act of communicating with server a top loading bar is implemented from scratch, without using any external library or package.
+- __Spinner:__ Loading of next bach of news article at the end of page is accompanied by a Spinner.
 ---
 
-### 🪝 React Hooks
- Here is a list of React hooks and their respective roles in the project:
- - __useState:__  Manages component-level state and triggers re-render in response to user interactions.
- - __useEffeect:__ Its first major application is to handle user's manual page refresh. Second major role is to load and delete necessary Notes on relevent renders.
- - __useLocation:__ Helps in conditionally rendering components such as Navbar based on current route.
- - __useNavigate:__ To redirect user on actions such as Signup, Login, Logout.
- - __useContext:__ Used in Context API for make certain variables and functiions available across multiple components.
- - __useRef:__ To create variables that retain their values between renders, like state variables, but does not trigger re-render on value update, like normal variable. In this project, it is used to store DOM references and IDs.
+### Performance
+ - __Smart State handling:__ Updating state variables is an asynchronous process. Hence its value must not be used just after initiating its value update, otherwise stale values will be rendered. To handle this in the app, useRef hook is used. This hook can create variables which retain their value between renders and hence can be used to store state variable's updated value for future use.
+- __Throttling:__ When user scrolls down to the end of page, the scroll position triggers a Fetch call for more articles. Server may take time to respond, and the app will take some time to update user interface. In the meantime, the scroll bar stays at the bottom position, triggering multiple fetch calls. This can lead to cluttering of News feed, duplicate News articles, and even app crash. To avoid this, we use throttling. We will put a cooldown period between two consecutive fetch calls. The delay would ensure that interface gets updated before triggering the next fetch call.
 ---
 
 ### 🌍 Deployment
