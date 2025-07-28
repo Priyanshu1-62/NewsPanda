@@ -24,13 +24,15 @@ Update: check out the live app [here](https://priyanshu1-62.github.io/NewsPanda)
 - All catagory names, API parameters and styling properties are kept declarative, promoting scalability and easier maintainance.
 ---
 
-### Features
-- __Infinite Scroll:__ For the selected News category, only a certain number of News articles are fetched, typically sufficient enough to fill the page. Scroll position is continuously under observation and as soon as it reaches near end of page, a new batch of News articles of same catagory are fetched.
-- __Top Loading bar:__ In order to show progress and signify the act of communicating with server a top loading bar is implemented from scratch, without using any external library or package.
-- __Spinner:__ Loading of next bach of news article at the end of page is accompanied by a Spinner.
+### ✨ Features
+- __Category Navigation:__ Users can easily switch between News categories - like Business, Entertainment, Sports, Science, Health, Technology, or a mashup, using the responsive Navbar.
+- __Responsive Design:__ App layout is adaptive according to device size, ensuring readablility and suitable element scaling.
+- __Infinite Scroll:__ For the selected News category, only a certain number of News articles are fetched, sufficient enough to fill the viewport. Scroll position is continuously monitored and as soon as it reaches near the bottom of the page, next batch of News articles of same catagory are fetched. This creates a seamless and continuous reading experience.
+- __Top Loading bar:__ In order to show progress and signify the act of communicating with server a top loading bar is implemented from scratch, without relying on any third-party libraries. It subtly indicates data is being loaded, enhancing perceived responsiveness.
+- __Spinner:__ While additional articles are being loaded, especially during infinite scolling, a spinner appears at the bottom of the page. It lets user know that content is on the way, avoiding confusion and repeated scrolling.
 ---
 
-### Performance
+### ⚡ Performance
  - __Smart State handling:__ Updating state variables is an asynchronous process. Hence its value must not be used just after initiating its value update, otherwise stale values will be rendered. To handle this in the app, useRef hook is used. This hook can create variables which retain their value between renders and hence can be used to store state variable's updated value for future use.
 - __Throttling:__ When user scrolls down to the end of page, the scroll position triggers a Fetch call for more articles. Server may take time to respond, and the app will take some time to update user interface. In the meantime, the scroll bar stays at the bottom position, triggering multiple fetch calls. This can lead to cluttering of News feed, duplicate News articles, and even app crash. To avoid this, we use throttling. We will put a cooldown period between two consecutive fetch calls. The delay would ensure that interface gets updated before triggering the next fetch call.
 ---
