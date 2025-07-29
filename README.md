@@ -39,12 +39,12 @@ Update: check out the live app [here](https://priyanshu1-62.github.io/NewsPanda)
 ---
 
 ### 🌍 Deployment
-- Frontend: [Vercel](https://i-note-book-two.vercel.app)
-- Backend: [Render](https://inotebook-server-8i8l.onrender.com)
+- Frontend: [Github Pages](https://priyanshu1-62.github.io/NewsPanda)
+- Backend: [Render](https://newspanda-proxyserver.onrender.com)
 ---
 
 ### 📎 Related Repositories
-- Frontend: [iNoteBook Backend](https://github.com/Priyanshu1-62/iNoteBook-Server.git)
+- Frontend: [NewsPanda Backend](https://github.com/Priyanshu1-62/NewsPanda_ProxyServer)
 ---
 
 ## 📛 Badges Credit
