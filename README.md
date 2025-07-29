@@ -44,7 +44,7 @@ Update: check out the live app [here](https://priyanshu1-62.github.io/NewsPanda)
 ---
 
 ### 📎 Related Repositories
-- Frontend: [NewsPanda Backend](https://github.com/Priyanshu1-62/NewsPanda_ProxyServer)
+- Backend: [NewsPanda Backend](https://github.com/Priyanshu1-62/NewsPanda_ProxyServer)
 ---
 
 ## 📛 Badges Credit
