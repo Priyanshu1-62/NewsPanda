@@ -17,6 +17,15 @@ Update: check out the live app [here](https://priyanshu1-62.github.io/NewsPanda)
 - This is a React based project designed to fetch news articles from [NewsAPI](https://newsapi.org) across multiple categories, and present them in a catagorized, structured way. To ensure smooth performance and a seamless reading experience, the app incorporates many modern frontend techniques. More about them in next sections.
 ---
 
+<p align="center">
+  <img src="./public/Home-Mobile.png" alt="Home-Mobile" width="45%" />
+  <img src="./public/Home-iPad.png" alt="Home-iPad" width="45%" />
+</p>
+
+<br/>
+
+![Home-Desktop](./public/Home-Desktop.png)
+
 ### 🛠️ Architecture
 - For learning purpose, complete design was initially executed using React Class based components and Life-cycle methods. This lead to a strong foundation for how React actually manages states, props, and re-rendering. Once completed, all components were converted into funcitonal based components. This helped to grasp mapping between class based and functional based components and made it clear how Reach hooks replaces life-cycle methods.
 - Regarding structure, multiple routes are defined which are further utilized in Navbar as a means to navigate user to different News category sections.
