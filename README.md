@@ -13,7 +13,7 @@ Update: check out the live app [here](https://priyanshu1-62.github.io/NewsPanda)
 ---
 
 ### 🗺️ Overview
-- NewsPanda is your one-stop destination to get your daily doze of news. Curious about stocks? Whether you're tracking the stock market, curious about box office records, need details of the upcomming space mission, or just looking to stay updated with the latest in health and technology — NewsPanda got you covered !!
+- NewsPanda is your one-stop destination to get your daily doze of news. Whether you're tracking the stock market, curious about box office records, need details of the upcomming space mission, or just looking to stay updated with the latest in health and technology — NewsPanda got you covered !!
 - This is a React based project designed to fetch news articles from [NewsAPI](https://newsapi.org) across multiple categories, and present them in a catagorized, structured way. To ensure smooth performance and a seamless reading experience, the app incorporates many modern frontend techniques. More about them in next sections.
 ---
 
