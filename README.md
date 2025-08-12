@@ -18,8 +18,8 @@ Update: check out the live app [here](https://priyanshu1-62.github.io/NewsPanda)
    - `cd NewsPanda`
    - `npm install`
 2) Environment Variables: <br>
-   Create a .env file in the project root with (Get your NewsAPI key for free from the [official website](https://newsapi.org/)):
-   - `NEWS_API_KEY=<Enter_your_API_Key>`
+   Create a .env.local file in the project root with (Get your NewsAPI key for free from the [official website](https://newsapi.org/)):
+   - `REACT_APP_API=<Enter_your_API_Key>`
 3) Backend Setup:
    - Follow setup steps in [NewsPanda Backend](https://github.com/Priyanshu1-62/NewsPanda_ProxyServer.git) repo.
 4) Run Frontend:
