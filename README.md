@@ -12,6 +12,20 @@ Update: check out the live app [here](https://priyanshu1-62.github.io/NewsPanda)
 - [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-121013?logo=github&logoColor=white)](#)
 ---
 
+### ⚙️ Setup
+1) Installation:
+   - `git clone https://github.com/Priyanshu1-62/NewsPanda.git`
+   - `cd NewsPanda`
+   - `npm install`
+2) Environment Variables: <br>
+   Create a .env file in the project root with (Get your NewsAPI key for free from the [official website](https://newsapi.org/)):
+   - `NEWS_API_KEY=<Enter_your_API_Key>`
+3) Backend Setup:
+   - Follow setup steps in [NewsPanda Backend](https://github.com/Priyanshu1-62/NewsPanda_ProxyServer.git) repo.
+4) Run Frontend:
+   - `npm run dev`
+---
+
 ### 🗺️ Overview
 - NewsPanda is your one-stop destination to get your daily doze of news. Whether you're tracking the stock market, curious about box office records, need details of the upcomming space mission, or just looking to stay updated with the latest in health and technology — NewsPanda got you covered !!
 - This is a React based project designed to fetch news articles from [NewsAPI](https://newsapi.org) across multiple categories, and present them in a catagorized, structured way. To ensure smooth performance and a seamless reading experience, the app incorporates many modern frontend techniques. More about them in next sections.
