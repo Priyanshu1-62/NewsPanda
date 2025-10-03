@@ -12,7 +12,7 @@ Update: check out the live app [here](https://priyanshu1-62.github.io/NewsPanda)
 - [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-121013?logo=github&logoColor=white)](#)
 ---
 
-### ⚙️ Setup
+### ⚙️ Setup (Windows)
 1) Installation:
    - `git clone https://github.com/Priyanshu1-62/NewsPanda.git`
    - `cd NewsPanda`
